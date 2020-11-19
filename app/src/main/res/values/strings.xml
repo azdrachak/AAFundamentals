@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">AAFundamentals</string>
+    <string name="title_activity_movie_detail">MovieDetail</string>
+    <string name="robert_down">Robert\nDowney Jr.</string>
+    <string name="chris_evans">Chris\nEvans</string>
+    <string name="mark_ruffal">Mark\nRuffalo</string>
+    <string name="chris_hemsw">Chris\nHemsworth</string>
+    <string name="heading">Cast</string>
+    <string name="path_back">Path back</string>
+    <string name="back">Back</string>
+    <string name="cast">Cast</string>
+    <string name="name">Avengers:\nEnd Game</string>
+    <string name="pg_rating">13+</string>
+    <string name="tag">Action, Adventure, Fantasy</string>
+    <string name="reviews">125 Reviews</string>
+    <string name="full_star">Full star</string>
+    <string name="empty_star">Empty star</string>
+    <string name="storyline">Storyline</string>
+    <string name="storylineText">After the devastating events of Avengers: Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos&#8217; actions and restore balance to the universe.</string>
+    <string name="cast_member">Cast member</string>
+    <string name="click_me">Click me</string>
+
 </resources>

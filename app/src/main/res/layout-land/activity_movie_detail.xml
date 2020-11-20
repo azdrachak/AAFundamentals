@@ -13,11 +13,11 @@
 
         <ImageView
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:contentDescription="@string/app_name"
             android:scaleType="fitXY"
-            android:src="@drawable/background"
+            android:src="@drawable/background_land"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

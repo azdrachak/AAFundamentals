@@ -9,12 +9,13 @@
         <item name="android:textColor">#D8D8D8</item>
     </style>
 
-    <style name="ratingBar" parent="Widget.AppCompat.RatingBar.Small">
+    <style name="ratingBar" parent="Widget.AppCompat.RatingBar">
+        <item name="android:progressDrawable">@drawable/custom_rating_bar</item>
+        <item name="android:minHeight">12dp</item>
+        <item name="android:maxHeight">24dp</item>
         <item name="android:stepSize">1</item>
         <item name="android:isIndicator">true</item>
         <item name="android:numStars">5</item>
-        <item name="colorControlNormal">#E8E8E8</item>
-        <item name="colorControlActivated">#FF3365</item>
     </style>
 
     <style name="heading">
@@ -48,12 +49,14 @@
     </style>
 
     <style name="tag">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textColor">#FF3466</item>
     </style>
 
     <style name="reviews">
         <item name="android:textSize">12sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textColor">#6D6D80</item>
     </style>
 

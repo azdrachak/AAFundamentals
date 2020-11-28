@@ -3,10 +3,12 @@ package com.github.azdrachak.aafundamentals
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : AppCompatActivity(), FragmentMoviesList.IMovieClick {
+class MainActivity : AppCompatActivity(),
+    MoviesListFragment.MovieClickListener,
+    MoviesDetailsFragment.MovieDetailsClickListener {
 
-    private var rootFragment = FragmentMoviesList().apply { setListener(this@MainActivity) }
-    private var detailsFragment = FragmentMoviesDetails()
+    private var rootFragment = MoviesListFragment.newInstance()
+    private var detailsFragment = MoviesDetailsFragment.newInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,25 +17,32 @@ class MainActivity : AppCompatActivity(), FragmentMoviesList.IMovieClick {
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
-                .add(R.id.fragmentContainer, rootFragment, FragmentMoviesList.TAG)
+                .add(
+                    R.id.fragmentContainer,
+                    MoviesListFragment.newInstance(),
+                    MoviesListFragment.TAG
+                )
                 .commit()
         } else {
-            val movieList = supportFragmentManager.findFragmentByTag(FragmentMoviesList.TAG)
-            rootFragment =
-                (movieList as FragmentMoviesList).apply { setListener(this@MainActivity) }
+            val movieList = supportFragmentManager.findFragmentByTag(MoviesListFragment.TAG)
+            rootFragment = movieList as MoviesListFragment
 
-            val movieDetails = supportFragmentManager.findFragmentByTag(FragmentMoviesDetails.TAG)
+            val movieDetails = supportFragmentManager.findFragmentByTag(MoviesDetailsFragment.TAG)
             if (movieDetails != null) {
-                detailsFragment = movieDetails as FragmentMoviesDetails
+                detailsFragment = movieDetails as MoviesDetailsFragment
             }
         }
     }
 
-    override fun click() {
+    override fun onMovieClicked() {
         supportFragmentManager
             .beginTransaction()
-            .add(R.id.fragmentContainer, detailsFragment, FragmentMoviesDetails.TAG)
-            .addToBackStack(FragmentMoviesDetails.TAG)
+            .add(R.id.fragmentContainer, detailsFragment, MoviesDetailsFragment.TAG)
+            .addToBackStack(MoviesDetailsFragment.TAG)
             .commit()
+    }
+
+    override fun onBackButtonClicked() {
+        onBackPressed()
     }
 }

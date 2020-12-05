@@ -124,91 +124,15 @@
             android:textAppearance="@style/cast_header"
             app:layout_constraintTop_toBottomOf="@id/storylineText" />
 
-        <ImageView
-            android:id="@+id/cast1"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
-            android:contentDescription="@string/cast_member"
-            android:src="@drawable/downey"
-            app:layout_constraintEnd_toStartOf="@id/cast2"
-            app:layout_constraintHorizontal_chainStyle="spread"
+            android:layout_marginEnd="16dp"
+            android:id="@+id/actors"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/cast"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cast" />
-
-        <ImageView
-            android:id="@+id/cast2"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginEnd="8dp"
-            android:contentDescription="@string/cast_member"
-            android:src="@drawable/evans"
-            app:layout_constraintEnd_toStartOf="@id/cast3"
-            app:layout_constraintStart_toEndOf="@id/cast1"
-            app:layout_constraintTop_toBottomOf="@id/cast" />
-
-        <ImageView
-            android:id="@+id/cast3"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginEnd="8dp"
-            android:contentDescription="@string/cast_member"
-            android:src="@drawable/ruffalo"
-            app:layout_constraintEnd_toStartOf="@id/cast4"
-            app:layout_constraintStart_toEndOf="@id/cast2"
-            app:layout_constraintTop_toBottomOf="@id/cast" />
-
-        <ImageView
-            android:id="@+id/cast4"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginEnd="8dp"
-            android:contentDescription="@string/cast_member"
-            android:src="@drawable/hemsworth"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/cast3"
-            app:layout_constraintTop_toBottomOf="@id/cast" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:lineSpacingExtra="2sp"
-            android:text="@string/robert_down"
-            android:textAppearance="@style/cast"
-            app:layout_constraintStart_toStartOf="@id/cast1"
-            app:layout_constraintTop_toBottomOf="@id/cast1" />
-
-        <TextView
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:lineSpacingExtra="2sp"
-            android:text="@string/chris_evans"
-            android:textAppearance="@style/cast"
-            app:layout_constraintStart_toStartOf="@id/cast2"
-            app:layout_constraintTop_toBottomOf="@id/cast2" />
-
-        <TextView
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:lineSpacingExtra="2sp"
-            android:text="@string/mark_ruffal"
-            android:textAppearance="@style/cast"
-            app:layout_constraintStart_toStartOf="@id/cast3"
-            app:layout_constraintTop_toBottomOf="@id/cast3" />
-
-        <TextView
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:lineSpacingExtra="2sp"
-            android:text="@string/chris_hemsw"
-            android:textAppearance="@style/cast"
-            app:layout_constraintStart_toStartOf="@id/cast4"
-            app:layout_constraintTop_toBottomOf="@id/cast4" />
+            app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

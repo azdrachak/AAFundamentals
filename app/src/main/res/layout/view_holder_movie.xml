@@ -2,7 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="296dp"
+    android:layout_marginStart="6dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginEnd="6dp"
     android:background="@drawable/card_bg">
 
     <ImageView
@@ -15,6 +18,7 @@
         android:layout_marginBottom="48dp"
         android:adjustViewBounds="true"
         android:contentDescription="@string/background"
+        android:foreground="@drawable/gradient"
         android:scaleType="fitXY"
         android:src="@drawable/avengers_small"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -23,6 +27,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/pgRating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
@@ -33,6 +38,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/like"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -82,6 +88,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
+        android:id="@+id/reviews"
         style="@style/reviews"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

@@ -13,9 +13,9 @@ class MovieDetailsAdapter : RecyclerView.Adapter<MovieDetailsViewHolder>() {
     private var actors: List<Actor> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieDetailsViewHolder {
-        return MovieDetailsViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.view_holder_actor, parent, false)
-        )
+        val inflater = LayoutInflater.from(parent.context)
+        val view = inflater.inflate(R.layout.view_holder_actor, parent, false)
+        return MovieDetailsViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: MovieDetailsViewHolder, position: Int) {
@@ -26,6 +26,7 @@ class MovieDetailsAdapter : RecyclerView.Adapter<MovieDetailsViewHolder>() {
 
     fun updateActors(newActors: List<Actor>) {
         actors = newActors
+        notifyDataSetChanged()
     }
 }
 

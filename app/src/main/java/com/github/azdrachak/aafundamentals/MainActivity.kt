@@ -2,7 +2,6 @@ package com.github.azdrachak.aafundamentals
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.github.azdrachak.aafundamentals.data.MovieData
 
 class MainActivity : AppCompatActivity(),
     MoviesDetailsFragment.MovieDetailsClickListener {
@@ -15,19 +14,7 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_main)
 
         if (savedInstanceState == null) {
-            rootFragment = MoviesListFragment.newInstance(object : MoviesListAdapter.OnMovieClickListener {
-                override fun onMovieClick(movie: MovieData) {
-                    supportFragmentManager
-                        .beginTransaction()
-                        .add(
-                            R.id.fragmentContainer,
-                            MoviesDetailsFragment.newInstance(),
-                            MoviesDetailsFragment.TAG
-                        )
-                        .addToBackStack(MoviesDetailsFragment.TAG)
-                        .commit()
-                }
-            })
+            rootFragment = MoviesListFragment.newInstance()
             supportFragmentManager
                 .beginTransaction()
                 .add(

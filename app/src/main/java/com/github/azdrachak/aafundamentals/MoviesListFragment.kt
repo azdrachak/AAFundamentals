@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.azdrachak.aafundamentals.data.MovieData
 
-class MoviesListFragment(val clickListener: MoviesListAdapter.OnMovieClickListener) : Fragment() {
+class MoviesListFragment : Fragment(),
+    MoviesListAdapter.OnMovieClickListener {
 
     private var movies: List<MovieData> = listOf(
         MovieData(
@@ -57,8 +58,7 @@ class MoviesListFragment(val clickListener: MoviesListAdapter.OnMovieClickListen
     companion object {
         const val TAG = "MovieListFragment"
 
-        fun newInstance(clickListener: MoviesListAdapter.OnMovieClickListener): MoviesListFragment =
-            MoviesListFragment(clickListener)
+        fun newInstance(): MoviesListFragment = MoviesListFragment()
     }
 
     override fun onCreateView(
@@ -71,14 +71,21 @@ class MoviesListFragment(val clickListener: MoviesListAdapter.OnMovieClickListen
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.movies)
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        recyclerView.adapter = MoviesListAdapter(object : MoviesListAdapter.OnMovieClickListener {
-            override fun onMovieClick(movie: MovieData) {
-                clickListener.onMovieClick(movie)
-            }
-        })
+        recyclerView.adapter = MoviesListAdapter(this)
         (recyclerView.adapter as MoviesListAdapter).setMovies(movies)
 
         super.onViewCreated(view, savedInstanceState)
     }
 
+    override fun onMovieClick(movie: MovieData) {
+        requireActivity().supportFragmentManager
+            .beginTransaction()
+            .add(
+                R.id.fragmentContainer,
+                MoviesDetailsFragment.newInstance(),
+                MoviesDetailsFragment.TAG
+            )
+            .addToBackStack(MoviesDetailsFragment.TAG)
+            .commit()
+    }
 }

@@ -4,22 +4,22 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity(),
-    MoviesListFragment.MovieClickListener,
     MoviesDetailsFragment.MovieDetailsClickListener {
 
-    private var rootFragment = MoviesListFragment.newInstance()
-    private var detailsFragment = MoviesDetailsFragment.newInstance()
+    private lateinit var rootFragment: MoviesListFragment
+    private lateinit var detailsFragment: MoviesDetailsFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         if (savedInstanceState == null) {
+            rootFragment = MoviesListFragment.newInstance()
             supportFragmentManager
                 .beginTransaction()
                 .add(
                     R.id.fragmentContainer,
-                    MoviesListFragment.newInstance(),
+                    rootFragment,
                     MoviesListFragment.TAG
                 )
                 .commit()
@@ -32,14 +32,6 @@ class MainActivity : AppCompatActivity(),
                 detailsFragment = movieDetails as MoviesDetailsFragment
             }
         }
-    }
-
-    override fun onMovieClicked() {
-        supportFragmentManager
-            .beginTransaction()
-            .add(R.id.fragmentContainer, detailsFragment, MoviesDetailsFragment.TAG)
-            .addToBackStack(MoviesDetailsFragment.TAG)
-            .commit()
     }
 
     override fun onBackButtonClicked() {

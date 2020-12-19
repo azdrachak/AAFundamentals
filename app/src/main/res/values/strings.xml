@@ -1,13 +1,11 @@
 <resources>
     <string name="app_name">AAFundamentals</string>
-    <string name="robert_down">Robert\nDowney Jr.</string>
-    <string name="chris_evans">Chris\nEvans</string>
     <string name="mark_ruffal">Mark\nRuffalo</string>
-    <string name="chris_hemsw">Chris\nHemsworth</string>
     <string name="back">Back</string>
     <string name="cast">Cast</string>
     <string name="name">Avengers:\nEnd Game</string>
-    <string name="pg_rating">13+</string>
+    <string name="pg_rating13">13+</string>
+    <string name="pg_rating16">16+</string>
     <string name="tag">Action, Adventure, Fantasy</string>
     <string name="reviews">125 Reviews</string>
     <string name="storyline">Storyline</string>

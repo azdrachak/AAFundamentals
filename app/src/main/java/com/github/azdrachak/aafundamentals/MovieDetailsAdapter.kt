@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.github.azdrachak.aafundamentals.data.Actor
 
 class MovieDetailsAdapter : RecyclerView.Adapter<MovieDetailsViewHolder>() {
@@ -30,12 +31,12 @@ class MovieDetailsAdapter : RecyclerView.Adapter<MovieDetailsViewHolder>() {
     }
 }
 
-class MovieDetailsViewHolder(listItem: View) : RecyclerView.ViewHolder(listItem) {
+class MovieDetailsViewHolder(private val listItem: View) : RecyclerView.ViewHolder(listItem) {
     private val photo: ImageView = listItem.findViewById(R.id.photo)
     private val name: TextView = listItem.findViewById(R.id.name)
 
     fun bind(actor: Actor) {
-        photo.setImageResource(actor.photo)
+        Glide.with(listItem).load(actor.picture).into(photo)
         name.text = actor.name
     }
 }

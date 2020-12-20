@@ -16,7 +16,6 @@ class MoviesListFragment : Fragment(),
 
     companion object {
         const val TAG = "MovieListFragment"
-        const val MOVIE_ID = "movieId"
 
         fun newInstance(): MoviesListFragment = MoviesListFragment()
     }
@@ -39,13 +38,11 @@ class MoviesListFragment : Fragment(),
     }
 
     override fun onMovieClick(movie: Movie) {
-        val bundle = Bundle()
-        bundle.putInt(MOVIE_ID, movie.id)
         requireActivity().supportFragmentManager
             .beginTransaction()
             .add(
                 R.id.fragmentContainer,
-                MoviesDetailsFragment.newInstance(bundle),
+                MoviesDetailsFragment.newInstance(movie.id),
                 MoviesDetailsFragment.TAG
             )
             .addToBackStack(MoviesDetailsFragment.TAG)

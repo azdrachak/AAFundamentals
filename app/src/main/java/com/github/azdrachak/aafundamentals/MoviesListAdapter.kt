@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import com.github.azdrachak.aafundamentals.data.Genre
 import com.github.azdrachak.aafundamentals.data.Movie
 
@@ -39,7 +39,7 @@ class MoviesListAdapter(private val movieClickListener: OnMovieClickListener) :
 }
 
 class MovieHolder(
-    private val movieItem: View,
+    movieItem: View,
     private val movieClickListener: MoviesListAdapter.OnMovieClickListener
 ) :
     RecyclerView.ViewHolder(movieItem) {
@@ -54,10 +54,7 @@ class MovieHolder(
     private val clickItem: View = movieItem.findViewById(R.id.movieClick)
 
     fun bind(movie: Movie) {
-        Glide
-            .with(movieItem)
-            .load(movie.poster)
-            .into(movieBackground)
+        movieBackground.load(movie.poster)
         pgRating.setImageResource(getPgRatingImage(movie.minimumAge))
         like.setImageResource(R.drawable.like)
         movieTitle.text = movie.title

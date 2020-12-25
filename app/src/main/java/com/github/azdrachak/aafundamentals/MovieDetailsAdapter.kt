@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.github.azdrachak.aafundamentals.data.Actor
 
 class MovieDetailsAdapter : RecyclerView.Adapter<MovieDetailsViewHolder>() {
@@ -35,7 +36,7 @@ class MovieDetailsViewHolder(listItem: View) : RecyclerView.ViewHolder(listItem)
     private val name: TextView = listItem.findViewById(R.id.name)
 
     fun bind(actor: Actor) {
-        photo.setImageResource(actor.photo)
+        photo.load(actor.picture)
         name.text = actor.name
     }
 }

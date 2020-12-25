@@ -2,6 +2,10 @@ package com.github.azdrachak.aafundamentals
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.github.azdrachak.aafundamentals.data.Movie
+import com.github.azdrachak.aafundamentals.data.loadMovies
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity(),
     MoviesDetailsFragment.MovieDetailsClickListener {
@@ -9,8 +13,20 @@ class MainActivity : AppCompatActivity(),
     private lateinit var rootFragment: MoviesListFragment
     private lateinit var detailsFragment: MoviesDetailsFragment
 
+    companion object {
+        var movies: List<Movie> = listOf()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch {
+            val operation = async(Dispatchers.IO) {
+                movies = loadMovies(applicationContext)
+            }
+            operation.await()
+        }
+
         setContentView(R.layout.activity_main)
 
         if (savedInstanceState == null) {

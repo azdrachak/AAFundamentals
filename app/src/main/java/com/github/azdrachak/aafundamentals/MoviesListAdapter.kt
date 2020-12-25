@@ -7,12 +7,14 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.github.azdrachak.aafundamentals.data.MovieData
+import coil.load
+import com.github.azdrachak.aafundamentals.data.Genre
+import com.github.azdrachak.aafundamentals.data.Movie
 
 class MoviesListAdapter(private val movieClickListener: OnMovieClickListener) :
     RecyclerView.Adapter<MovieHolder>() {
 
-    private var movieList: List<MovieData> = listOf()
+    private var movieList: List<Movie> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -26,17 +28,20 @@ class MoviesListAdapter(private val movieClickListener: OnMovieClickListener) :
 
     override fun getItemCount(): Int = movieList.size
 
-    fun setMovies(newMovies: List<MovieData>) {
+    fun setMovies(newMovies: List<Movie>) {
         movieList = newMovies
         notifyDataSetChanged()
     }
 
     interface OnMovieClickListener {
-        fun onMovieClick(movie: MovieData)
+        fun onMovieClick(movie: Movie)
     }
 }
 
-class MovieHolder(movieItem: View, private val movieClickListener: MoviesListAdapter.OnMovieClickListener) :
+class MovieHolder(
+    movieItem: View,
+    private val movieClickListener: MoviesListAdapter.OnMovieClickListener
+) :
     RecyclerView.ViewHolder(movieItem) {
     private val movieBackground: ImageView = movieItem.findViewById(R.id.movieBackground)
     private val pgRating: ImageView = movieItem.findViewById(R.id.pgRating)
@@ -48,17 +53,23 @@ class MovieHolder(movieItem: View, private val movieClickListener: MoviesListAda
     private val tags: TextView = movieItem.findViewById(R.id.tagLine)
     private val clickItem: View = movieItem.findViewById(R.id.movieClick)
 
-    fun bind(movieData: MovieData) {
-        movieBackground.setImageResource(movieData.poster)
-        pgRating.setImageResource(movieData.pgRating)
-        like.setImageResource(movieData.like)
-        movieTitle.text = movieData.title
-        movieLength.text = "${movieData.length} MIN"
-        movieRating.rating =
-            if (movieData.rating > 5) 5.0f else movieData.rating.toFloat()
-        reviewsCount.text = "${movieData.reviewsCount} REVIEWS"
-        tags.text = movieData.tags.joinToString(", ")
+    fun bind(movie: Movie) {
+        movieBackground.load(movie.poster)
+        pgRating.setImageResource(getPgRatingImage(movie.minimumAge))
+        like.setImageResource(R.drawable.like)
+        movieTitle.text = movie.title
+        movieLength.text = "${movie.runtime} MIN"
+        movieRating.rating = convertRating(movie.ratings)
+        reviewsCount.text = "${movie.numberOfRatings} REVIEWS"
+        tags.text = getTags(movie.genres)
 
-        clickItem.setOnClickListener { movieClickListener.onMovieClick(movieData) }
+        clickItem.setOnClickListener { movieClickListener.onMovieClick(movie) }
     }
+
+    private fun convertRating(rating10: Float): Float = rating10 / 2.0f
+
+    private fun getPgRatingImage(minimumAge: Int): Int =
+        if (minimumAge > 13) R.drawable.pg16 else R.drawable.pg13
+
+    private fun getTags(genres: List<Genre>): String = genres.joinToString(", ") { it.name }
 }

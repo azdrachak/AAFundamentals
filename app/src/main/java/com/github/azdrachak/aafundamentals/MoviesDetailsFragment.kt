@@ -5,20 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.github.azdrachak.aafundamentals.data.Actor
+import coil.load
+import com.github.azdrachak.aafundamentals.data.Movie
 
 class MoviesDetailsFragment : Fragment() {
 
-    private val actors: List<Actor> = listOf(
-        Actor(R.drawable.downey, "Robert Dawney"),
-        Actor(R.drawable.evans, "Chris Evans"),
-        Actor(R.drawable.ruffalo, "Mark Ruffalo"),
-        Actor(R.drawable.hemsworth, "Chris Hemsworth")
-    )
+    private lateinit var movie: Movie
 
     private var onBackButtonClickListener: MovieDetailsClickListener? = null
 
@@ -26,8 +23,15 @@ class MoviesDetailsFragment : Fragment() {
 
     companion object {
         const val TAG = "MovieDetailsFragment"
+        private const val MOVIE_ID = "movieId"
 
-        fun newInstance(): MoviesDetailsFragment = MoviesDetailsFragment()
+        fun newInstance(movieId: Int): MoviesDetailsFragment {
+            val bundle = Bundle()
+            bundle.putInt(MOVIE_ID, movieId)
+            val fragment = MoviesDetailsFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 
     override fun onCreateView(
@@ -37,6 +41,15 @@ class MoviesDetailsFragment : Fragment() {
     ): View = inflater.inflate(R.layout.fragment_movies_details, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        val poster = view.findViewById<ImageView>(R.id.poster)
+        val title = view.findViewById<TextView>(R.id.name)
+        val pgRating = view.findViewById<TextView>(R.id.pgRating)
+        val description = view.findViewById<TextView>(R.id.storylineText)
+
+        val movieId = arguments?.getInt(MOVIE_ID)
+        movie = MainActivity.movies.single { it.id == movieId }
+
         view.findViewById<TextView>(R.id.path).setOnClickListener {
             onBackButtonClickListener?.onBackButtonClicked()
         }
@@ -45,9 +58,20 @@ class MoviesDetailsFragment : Fragment() {
         recyclerView.adapter = MovieDetailsAdapter()
         recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        (recyclerView.adapter as MovieDetailsAdapter).updateActors(actors)
+        (recyclerView.adapter as MovieDetailsAdapter).updateActors(movie.actors)
+        if (movie.actors.isEmpty()) view.findViewById<TextView>(R.id.cast).visibility = View.GONE
+
+        poster.load(movie.backdrop)
+        title.text = movie.title
+        pgRating.text = getPgRating(movie.minimumAge)
+        description.text = movie.overview
 
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun getPgRating(minimumAge: Int): String {
+        val resId: Int = if (minimumAge < 16) R.string.pg_rating13 else R.string.pg_rating16
+        return getString(resId)
     }
 
     override fun onAttach(context: Context) {

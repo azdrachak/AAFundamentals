@@ -5,14 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.azdrachak.aafundamentals.data.Movie
 
-class MoviesListFragment : Fragment(),
-    MoviesListAdapter.OnMovieClickListener {
+class MoviesListFragment : Fragment(), MoviesListAdapter.OnMovieClickListener {
 
-    private var movies: List<Movie> = listOf()
+    private var progressBar: View? = null
+    private var recyclerView: RecyclerView? = null
+
+    private val movieListViewModel: MovieListViewModel by viewModels()
 
     companion object {
         const val TAG = "MovieListFragment"
@@ -27,14 +30,32 @@ class MoviesListFragment : Fragment(),
     ): View = inflater.inflate(R.layout.fragment_movies_list, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        movies = MainActivity.movies
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.movies)
-        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        recyclerView.adapter = MoviesListAdapter(this)
-        (recyclerView.adapter as MoviesListAdapter).setMovies(movies)
+        initViews(view)
+
+        movieListViewModel.getMovies()
+
+        recyclerView?.let {
+            it.layoutManager = GridLayoutManager(requireContext(), 2)
+            it.adapter = MoviesListAdapter(this)
+        }
+
+        movieListViewModel.movieListLiveData.observe(viewLifecycleOwner) {
+            (recyclerView?.adapter as MoviesListAdapter).setMovies(it)
+        }
+
+        movieListViewModel.loadingLiveData.observe(viewLifecycleOwner) {
+            progressBar?.visibility = if (it) View.VISIBLE else View.GONE
+        }
 
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onDestroyView() {
+        recyclerView = null
+        progressBar = null
+
+        super.onDestroyView()
     }
 
     override fun onMovieClick(movie: Movie) {
@@ -47,5 +68,10 @@ class MoviesListFragment : Fragment(),
             )
             .addToBackStack(MoviesDetailsFragment.TAG)
             .commit()
+    }
+
+    private fun initViews(view: View) {
+        recyclerView = view.findViewById(R.id.movies)
+        progressBar = view.findViewById(R.id.progress)
     }
 }

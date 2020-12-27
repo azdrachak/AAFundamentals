@@ -3,13 +3,11 @@ package com.github.azdrachak.aafundamentals
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.RatingBar
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.github.azdrachak.aafundamentals.data.Genre
 import com.github.azdrachak.aafundamentals.data.Movie
+import com.github.azdrachak.aafundamentals.databinding.ViewHolderMovieBinding
 
 class MoviesListAdapter(private val movieClickListener: OnMovieClickListener) :
     RecyclerView.Adapter<MovieHolder>() {
@@ -43,27 +41,20 @@ class MovieHolder(
     private val movieClickListener: MoviesListAdapter.OnMovieClickListener
 ) :
     RecyclerView.ViewHolder(movieItem) {
-    private val movieBackground: ImageView = movieItem.findViewById(R.id.movieBackground)
-    private val pgRating: ImageView = movieItem.findViewById(R.id.pgRating)
-    private val like: ImageView = movieItem.findViewById(R.id.like)
-    private val movieTitle: TextView = movieItem.findViewById(R.id.card_name)
-    private val movieLength: TextView = movieItem.findViewById(R.id.minutes)
-    private val movieRating: RatingBar = movieItem.findViewById(R.id.ratingBar)
-    private val reviewsCount: TextView = movieItem.findViewById(R.id.reviews)
-    private val tags: TextView = movieItem.findViewById(R.id.tagLine)
-    private val clickItem: View = movieItem.findViewById(R.id.movieClick)
+
+    private val binding = ViewHolderMovieBinding.bind(movieItem)
 
     fun bind(movie: Movie) {
-        movieBackground.load(movie.poster)
-        pgRating.setImageResource(getPgRatingImage(movie.minimumAge))
-        like.setImageResource(R.drawable.like)
-        movieTitle.text = movie.title
-        movieLength.text = "${movie.runtime} MIN"
-        movieRating.rating = convertRating(movie.ratings)
-        reviewsCount.text = "${movie.numberOfRatings} REVIEWS"
-        tags.text = getTags(movie.genres)
+        binding.movieBackground.load(movie.poster)
+        binding.pgRating.setImageResource(getPgRatingImage(movie.minimumAge))
+        binding.like.setImageResource(R.drawable.like)
+        binding.cardName.text = movie.title
+        binding.minutes.text = "${movie.runtime} MIN"
+        binding.ratingBar.rating = convertRating(movie.ratings)
+        binding.reviews.text = "${movie.numberOfRatings} REVIEWS"
+        binding.tagLine.text = getTags(movie.genres)
 
-        clickItem.setOnClickListener { movieClickListener.onMovieClick(movie) }
+        binding.movieClick.setOnClickListener { movieClickListener.onMovieClick(movie) }
     }
 
     private fun convertRating(rating10: Float): Float = rating10 / 2.0f

@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.RatingBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.github.azdrachak.aafundamentals.data.Genre
 import com.github.azdrachak.aafundamentals.data.Movie
+import com.github.azdrachak.aafundamentals.databinding.FragmentMoviesDetailsBinding
 
 class MoviesDetailsFragment : Fragment() {
 
@@ -22,15 +21,9 @@ class MoviesDetailsFragment : Fragment() {
 
     private val movieDetailsViewModel: MovieDetailsViewModel by viewModels()
 
-    private var recyclerView: RecyclerView? = null
-    private var poster: ImageView? = null
-    private var title: TextView? = null
-    private var pgRating: TextView? = null
-    private var description: TextView? = null
-    private var backButton: TextView? = null
-    private var tagline: TextView? = null
-    private var reviewsCount: TextView? = null
-    private var ratingBar: RatingBar? = null
+    private var _binding: FragmentMoviesDetailsBinding? = null
+    private val binding: FragmentMoviesDetailsBinding
+        get() = _binding!!
 
     companion object {
         const val TAG = "MovieDetailsFragment"
@@ -49,36 +42,38 @@ class MoviesDetailsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fragment_movies_details, container, false)
+    ): View {
+        _binding = FragmentMoviesDetailsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         val movieId = arguments?.getInt(MOVIE_ID)
-        initViews(view)
 
         movieDetailsViewModel.getMovie(movieId!!)
 
-        backButton?.setOnClickListener {
+        binding.path.setOnClickListener {
             onBackButtonClickListener?.onBackButtonClicked()
         }
 
-        recyclerView?.let {
-            it.adapter = MovieDetailsAdapter()
-            it.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        binding.actors.apply {
+            adapter = MovieDetailsAdapter()
+            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         }
 
         movieDetailsViewModel.movieLiveData.observe(viewLifecycleOwner) { movie: Movie ->
-            poster?.load(movie.backdrop)
-            title?.text = movie.title
-            pgRating?.text = getPgRating(movie.minimumAge)
-            description?.text = movie.overview
-            ratingBar?.rating = convertRating(movie.ratings)
-            tagline?.text = getTags(movie.genres)
+            binding.poster.load(movie.backdrop)
+            binding.name.text = movie.title
+            binding.pgRating.text = getPgRating(movie.minimumAge)
+            binding.storylineText.text = movie.overview
+            binding.ratingBar.rating = convertRating(movie.ratings)
+            binding.tagLine.text = getTags(movie.genres)
             val reviewsCountText = "${movie.numberOfRatings} REVIEWS"
-            reviewsCount?.text = reviewsCountText
+            binding.reviews.text = reviewsCountText
             if (movie.actors.isEmpty()) view.findViewById<TextView>(R.id.cast).visibility =
                 View.GONE
-            (recyclerView?.adapter as MovieDetailsAdapter).updateActors(movie.actors)
+            (binding.actors.adapter as MovieDetailsAdapter).updateActors(movie.actors)
         }
 
         super.onViewCreated(view, savedInstanceState)
@@ -102,30 +97,10 @@ class MoviesDetailsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        recyclerView = null
-        poster = null
-        title = null
-        pgRating = null
-        description = null
-        backButton = null
-        tagline = null
-        ratingBar = null
-        reviewsCount = null
+        _binding = null
     }
 
     interface MovieDetailsClickListener {
         fun onBackButtonClicked()
-    }
-
-    private fun initViews(view: View) {
-        recyclerView = view.findViewById(R.id.actors)
-        poster = view.findViewById(R.id.poster)
-        title = view.findViewById(R.id.name)
-        pgRating = view.findViewById(R.id.pgRating)
-        description = view.findViewById(R.id.storylineText)
-        backButton = view.findViewById(R.id.path)
-        tagline = view.findViewById(R.id.tagLine)
-        ratingBar = view.findViewById(R.id.ratingBar)
-        reviewsCount = view.findViewById(R.id.reviews)
     }
 }

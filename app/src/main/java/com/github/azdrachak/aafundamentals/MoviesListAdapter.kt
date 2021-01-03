@@ -37,7 +37,7 @@ class MoviesListAdapter(private val movieClickListener: OnMovieClickListener) :
 }
 
 class MovieHolder(
-    movieItem: View,
+    private val movieItem: View,
     private val movieClickListener: MoviesListAdapter.OnMovieClickListener
 ) :
     RecyclerView.ViewHolder(movieItem) {
@@ -49,10 +49,12 @@ class MovieHolder(
         binding.pgRating.setImageResource(getPgRatingImage(movie.minimumAge))
         binding.like.setImageResource(R.drawable.like)
         binding.cardName.text = movie.title
-        binding.minutes.text = "${movie.runtime} MIN"
         binding.ratingBar.rating = convertRating(movie.ratings)
-        binding.reviews.text = "${movie.numberOfRatings} REVIEWS"
         binding.tagLine.text = getTags(movie.genres)
+        with(movieItem.context) {
+            binding.minutes.text = this.getString(R.string.tmpMovieLength, movie.runtime)
+            binding.reviews.text = this.getString(R.string.tmpRatingsCount, movie.numberOfRatings)
+        }
 
         binding.movieClick.setOnClickListener { movieClickListener.onMovieClick(movie) }
     }

@@ -15,8 +15,9 @@ class MovieDetailsViewModel(private val app: Application) : AndroidViewModel(app
     fun getMovie(movieId: Int) {
         viewModelScope.launch {
             val movies = loadMovies(app.applicationContext)
-            val movie = movies.single { it.id == movieId }
-            _movieLiveData.postValue(movie)
+            movies.singleOrNull { it.id == movieId }?.let {
+                _movieLiveData.value = it
+            }
         }
     }
 }

@@ -4,7 +4,9 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.github.azdrachak.aafundamentals.data.Movie
 import com.github.azdrachak.aafundamentals.data.loadMovies
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MovieListViewModel(private val app: Application) : AndroidViewModel(app) {
 
@@ -17,9 +19,10 @@ class MovieListViewModel(private val app: Application) : AndroidViewModel(app) {
 
     fun getMovies() {
         viewModelScope.launch {
-            _loadingLiveData.postValue(true)
-            _movieListLiveData.postValue(loadMovies(app.applicationContext))
-            _loadingLiveData.postValue(false)
+            _loadingLiveData.value = true
+            _movieListLiveData.value =
+                withContext(Dispatchers.IO) { loadMovies(app.applicationContext) }
+            _loadingLiveData.value = false
         }
     }
 }

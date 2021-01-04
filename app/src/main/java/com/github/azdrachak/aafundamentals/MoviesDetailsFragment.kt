@@ -5,21 +5,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.github.azdrachak.aafundamentals.data.Genre
 import com.github.azdrachak.aafundamentals.data.Movie
+import com.github.azdrachak.aafundamentals.databinding.FragmentMoviesDetailsBinding
 
 class MoviesDetailsFragment : Fragment() {
 
-    private lateinit var movie: Movie
-
     private var onBackButtonClickListener: MovieDetailsClickListener? = null
 
-    private lateinit var recyclerView: RecyclerView
+    private val movieDetailsViewModel: MovieDetailsViewModel by viewModels()
+
+    private var _binding: FragmentMoviesDetailsBinding? = null
+    private val binding: FragmentMoviesDetailsBinding
+        get() = _binding!!
 
     companion object {
         const val TAG = "MovieDetailsFragment"
@@ -38,33 +42,39 @@ class MoviesDetailsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fragment_movies_details, container, false)
+    ): View {
+        _binding = FragmentMoviesDetailsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val poster = view.findViewById<ImageView>(R.id.poster)
-        val title = view.findViewById<TextView>(R.id.name)
-        val pgRating = view.findViewById<TextView>(R.id.pgRating)
-        val description = view.findViewById<TextView>(R.id.storylineText)
-
         val movieId = arguments?.getInt(MOVIE_ID)
-        movie = MainActivity.movies.single { it.id == movieId }
 
-        view.findViewById<TextView>(R.id.path).setOnClickListener {
+        movieDetailsViewModel.getMovie(movieId!!)
+
+        binding.path.setOnClickListener {
             onBackButtonClickListener?.onBackButtonClicked()
         }
 
-        recyclerView = view.findViewById(R.id.actors)
-        recyclerView.adapter = MovieDetailsAdapter()
-        recyclerView.layoutManager =
-            LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        (recyclerView.adapter as MovieDetailsAdapter).updateActors(movie.actors)
-        if (movie.actors.isEmpty()) view.findViewById<TextView>(R.id.cast).visibility = View.GONE
+        binding.actors.apply {
+            adapter = MovieDetailsAdapter()
+            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        }
 
-        poster.load(movie.backdrop)
-        title.text = movie.title
-        pgRating.text = getPgRating(movie.minimumAge)
-        description.text = movie.overview
+        movieDetailsViewModel.movieLiveData.observe(viewLifecycleOwner) { movie: Movie ->
+            binding.poster.load(movie.backdrop)
+            binding.name.text = movie.title
+            binding.pgRating.text = getPgRating(movie.minimumAge)
+            binding.storylineText.text = movie.overview
+            binding.ratingBar.rating = convertRating(movie.ratings)
+            binding.tagLine.text = getTags(movie.genres)
+            val reviewsCountText = "${movie.numberOfRatings} REVIEWS"
+            binding.reviews.text = reviewsCountText
+            if (movie.actors.isEmpty()) view.findViewById<TextView>(R.id.cast).visibility =
+                View.GONE
+            (binding.actors.adapter as MovieDetailsAdapter).updateActors(movie.actors)
+        }
 
         super.onViewCreated(view, savedInstanceState)
     }
@@ -74,11 +84,20 @@ class MoviesDetailsFragment : Fragment() {
         return getString(resId)
     }
 
+    private fun convertRating(rating10: Float): Float = rating10 / 2.0f
+
+    private fun getTags(genres: List<Genre>): String = genres.joinToString(", ") { it.name }
+
     override fun onAttach(context: Context) {
         if (context is MovieDetailsClickListener) {
             onBackButtonClickListener = context
         }
         super.onAttach(context)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     interface MovieDetailsClickListener {

@@ -18,5 +18,7 @@
     <string name="background">Background</string>
     <string name="movie_name">Avengers: End Game</string>
     <string name="minutes">137 min</string>
+    <string name="tmpMovieLength">%1$d MIN</string>
+    <string name="tmpRatingsCount">%1$d REVIEWS</string>
 
 </resources>

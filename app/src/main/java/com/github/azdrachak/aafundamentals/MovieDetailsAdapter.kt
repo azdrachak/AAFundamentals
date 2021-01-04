@@ -3,11 +3,10 @@ package com.github.azdrachak.aafundamentals
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.github.azdrachak.aafundamentals.data.Actor
+import com.github.azdrachak.aafundamentals.databinding.ViewHolderActorBinding
 
 class MovieDetailsAdapter : RecyclerView.Adapter<MovieDetailsViewHolder>() {
 
@@ -32,11 +31,10 @@ class MovieDetailsAdapter : RecyclerView.Adapter<MovieDetailsViewHolder>() {
 }
 
 class MovieDetailsViewHolder(listItem: View) : RecyclerView.ViewHolder(listItem) {
-    private val photo: ImageView = listItem.findViewById(R.id.photo)
-    private val name: TextView = listItem.findViewById(R.id.name)
+    private val binding = ViewHolderActorBinding.bind(listItem)
 
     fun bind(actor: Actor) {
-        photo.load(actor.picture)
-        name.text = actor.name
+        binding.photo.load(actor.picture)
+        binding.name.text = actor.name
     }
 }

@@ -1,14 +1,15 @@
 package com.github.azdrachak.aafundamentals
 
-import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.github.azdrachak.aafundamentals.data.Movie
-import com.github.azdrachak.aafundamentals.data.loadMovies
-import kotlinx.coroutines.Dispatchers
+import com.github.azdrachak.aafundamentals.data.getMoviesList
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.serialization.ExperimentalSerializationApi
 
-class MovieListViewModel(private val app: Application) : AndroidViewModel(app) {
+class MovieListViewModel : ViewModel() {
 
     private var _movieListLiveData: MutableLiveData<List<Movie>> = MutableLiveData(emptyList())
     val movieListLiveData: LiveData<List<Movie>>
@@ -17,11 +18,11 @@ class MovieListViewModel(private val app: Application) : AndroidViewModel(app) {
     val loadingLiveData: LiveData<Boolean>
         get() = _loadingLiveData
 
+    @ExperimentalSerializationApi
     fun getMovies() {
         viewModelScope.launch {
             _loadingLiveData.value = true
-            _movieListLiveData.value =
-                withContext(Dispatchers.IO) { loadMovies(app.applicationContext) }
+            _movieListLiveData.value = getMoviesList()
             _loadingLiveData.value = false
         }
     }

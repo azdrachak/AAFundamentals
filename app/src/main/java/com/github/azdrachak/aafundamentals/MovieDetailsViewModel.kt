@@ -1,25 +1,31 @@
 package com.github.azdrachak.aafundamentals
 
-import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.github.azdrachak.aafundamentals.data.Movie
-import com.github.azdrachak.aafundamentals.data.loadMovies
-import kotlinx.coroutines.Dispatchers
+import com.github.azdrachak.aafundamentals.data.getMoviesList
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.serialization.ExperimentalSerializationApi
 
-class MovieDetailsViewModel(private val app: Application) : AndroidViewModel(app) {
+class MovieDetailsViewModel : ViewModel() {
 
     private var _movieLiveData: MutableLiveData<Movie> = MutableLiveData<Movie>()
-    val movieLiveData: LiveData<Movie>
-        get() = _movieLiveData
+    val movieLiveData: LiveData<Movie> get() = _movieLiveData
 
+    private var _loadingLiveData: MutableLiveData<Boolean> = MutableLiveData()
+    val loadingLiveData: LiveData<Boolean> get() = _loadingLiveData
+
+    @ExperimentalSerializationApi
     fun getMovie(movieId: Int) {
         viewModelScope.launch {
-            val movies = withContext(Dispatchers.IO) { loadMovies(app.applicationContext) }
+            _loadingLiveData.value = true
+            val movies = getMoviesList()
             movies.singleOrNull { it.id == movieId }?.let {
                 _movieLiveData.value = it
             }
+            _loadingLiveData.value = false
         }
     }
 }

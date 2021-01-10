@@ -1,8 +1,3 @@
-// To parse the JSON, install kotlin's serialization plugin and do:
-//
-// val json    = Json(JsonConfiguration.Stable)
-// val credits = json.parse(Credits.serializer(), jsonString)
-
 package com.github.azdrachak.aafundamentals.data.tmdb
 
 import kotlinx.serialization.SerialName
@@ -16,8 +11,10 @@ data class Credits(
 
 @Serializable
 data class Cast(
+    @SerialName("id")
     val id: Int,
 
+    @SerialName("name")
     val name: String,
 
     @SerialName("profile_path")

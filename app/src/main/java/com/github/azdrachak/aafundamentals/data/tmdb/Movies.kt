@@ -1,8 +1,3 @@
-// To parse the JSON, install kotlin's serialization plugin and do:
-//
-// val json   = Json(JsonConfiguration.Stable)
-// val movies = json.parse(Movies.serializer(), jsonString)
-
 package com.github.azdrachak.aafundamentals.data.tmdb
 
 import kotlinx.serialization.SerialName
@@ -10,7 +5,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Movies(
+    @SerialName("page")
     val page: Long,
+
+    @SerialName("results")
     val results: List<Result>,
 
     @SerialName("total_pages")
@@ -22,6 +20,7 @@ data class Movies(
 
 @Serializable
 data class Result(
+    @SerialName("adult")
     val adult: Boolean,
 
     @SerialName("backdrop_path")
@@ -30,13 +29,16 @@ data class Result(
     @SerialName("genre_ids")
     val genreIDS: List<Int>,
 
+    @SerialName("id")
     val id: Int,
 
+    @SerialName("overview")
     val overview: String,
 
     @SerialName("poster_path")
     val posterPath: String,
 
+    @SerialName("title")
     val title: String,
 
     @SerialName("vote_average")

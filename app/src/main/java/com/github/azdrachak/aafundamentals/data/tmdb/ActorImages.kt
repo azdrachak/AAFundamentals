@@ -1,8 +1,3 @@
-// To parse the JSON, install kotlin's serialization plugin and do:
-//
-// val json   = Json(JsonConfiguration.Stable)
-// val images = json.parse(Images.serializer(), jsonString)
-
 package com.github.azdrachak.aafundamentals.data.tmdb
 
 import kotlinx.serialization.SerialName
@@ -13,7 +8,9 @@ data class Profile(
     @SerialName("file_path")
     val filePath: String,
 
+    @SerialName("height")
     val height: Int,
 
+    @SerialName("width")
     val width: Int
 )

@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Configuration(
+    @SerialName("images")
     val images: Images
 )
 

@@ -1,8 +1,3 @@
-// To parse the JSON, install kotlin's serialization plugin and do:
-//
-// val json    = Json(JsonConfiguration.Stable)
-// val details = json.parse(Details.serializer(), jsonString)
-
 package com.github.azdrachak.aafundamentals.data.tmdb
 
 import kotlinx.serialization.SerialName
@@ -13,16 +8,22 @@ data class Details(
     @SerialName("backdrop_path")
     val backdropPath: String,
 
+    @SerialName("genres")
     val genres: List<Genre>,
+
+    @SerialName("id")
     val id: Int,
 
+    @SerialName("overview")
     val overview: String,
 
     @SerialName("poster_path")
     val posterPath: String,
 
+    @SerialName("runtime")
     val runtime: Int,
 
+    @SerialName("title")
     val title: String,
 
     @SerialName("vote_average")

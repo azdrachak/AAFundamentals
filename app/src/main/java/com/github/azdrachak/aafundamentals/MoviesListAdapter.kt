@@ -5,8 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.github.azdrachak.aafundamentals.data.Genre
 import com.github.azdrachak.aafundamentals.data.Movie
+import com.github.azdrachak.aafundamentals.data.tmdb.Genre
 import com.github.azdrachak.aafundamentals.databinding.ViewHolderMovieBinding
 
 class MoviesListAdapter(private val movieClickListener: OnMovieClickListener) :

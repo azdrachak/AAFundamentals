@@ -11,9 +11,10 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.github.azdrachak.aafundamentals.data.Genre
 import com.github.azdrachak.aafundamentals.data.Movie
+import com.github.azdrachak.aafundamentals.data.tmdb.Genre
 import com.github.azdrachak.aafundamentals.databinding.FragmentMoviesDetailsBinding
+import kotlinx.serialization.ExperimentalSerializationApi
 
 class MoviesDetailsFragment : Fragment() {
 
@@ -47,6 +48,7 @@ class MoviesDetailsFragment : Fragment() {
         return binding.root
     }
 
+    @ExperimentalSerializationApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         val movieId = arguments?.getInt(MOVIE_ID)
@@ -74,6 +76,10 @@ class MoviesDetailsFragment : Fragment() {
             if (movie.actors.isEmpty()) view.findViewById<TextView>(R.id.cast).visibility =
                 View.GONE
             (binding.actors.adapter as MovieDetailsAdapter).updateActors(movie.actors)
+        }
+
+        movieDetailsViewModel.loadingLiveData.observe(viewLifecycleOwner) {
+            binding.progress.visibility = if (it) View.VISIBLE else View.GONE
         }
 
         super.onViewCreated(view, savedInstanceState)

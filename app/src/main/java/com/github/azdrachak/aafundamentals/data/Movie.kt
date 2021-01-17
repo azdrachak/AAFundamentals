@@ -1,5 +1,7 @@
 package com.github.azdrachak.aafundamentals.data
 
+import com.github.azdrachak.aafundamentals.data.tmdb.Genre
+
 data class Movie(
     val id: Int,
     val title: String,

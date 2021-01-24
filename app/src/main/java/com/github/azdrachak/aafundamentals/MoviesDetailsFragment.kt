@@ -12,15 +12,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.github.azdrachak.aafundamentals.data.Movie
+import com.github.azdrachak.aafundamentals.data.room.MoviesDatabase
 import com.github.azdrachak.aafundamentals.data.tmdb.Genre
 import com.github.azdrachak.aafundamentals.databinding.FragmentMoviesDetailsBinding
 import kotlinx.serialization.ExperimentalSerializationApi
 
 class MoviesDetailsFragment : Fragment() {
+    private val repository: MoviesRepository by lazy {
+        val db = MoviesDatabase.getInstance(this.requireContext().applicationContext)
+        MoviesRepository(db.movieDao()) }
 
     private var onBackButtonClickListener: MovieDetailsClickListener? = null
 
-    private val movieDetailsViewModel: MovieDetailsViewModel by viewModels()
+    private val movieDetailsViewModel: MovieDetailsViewModel by viewModels {
+        MovieDetailsViewModelFactory(repository)
+    }
 
     private var _binding: FragmentMoviesDetailsBinding? = null
     private val binding: FragmentMoviesDetailsBinding

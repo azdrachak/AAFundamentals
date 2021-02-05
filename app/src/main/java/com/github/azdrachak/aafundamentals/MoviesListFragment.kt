@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.github.azdrachak.aafundamentals.data.Movie
 import com.github.azdrachak.aafundamentals.data.getMoviesList
+import com.github.azdrachak.aafundamentals.data.room.MoviesDatabase
 import com.github.azdrachak.aafundamentals.databinding.FragmentMoviesListBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,11 +18,18 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
 
 class MoviesListFragment : Fragment(), MoviesListAdapter.OnMovieClickListener {
+    private val repository: MoviesRepository by lazy {
+        val db = MoviesDatabase.getInstance(this.requireContext().applicationContext)
+        MoviesRepository(db.movieDao())
+    }
 
     private val binding: FragmentMoviesListBinding get() = _binding!!
 
     private var _binding: FragmentMoviesListBinding? = null
-    private val movieListViewModel: MovieListViewModel by viewModels()
+
+    private val movieListViewModel: MovieListViewModel by viewModels {
+        MovieListViewModelFactory(repository)
+    }
 
     companion object {
         const val TAG = "MovieListFragment"

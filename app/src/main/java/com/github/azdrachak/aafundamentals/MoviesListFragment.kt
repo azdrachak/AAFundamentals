@@ -8,10 +8,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.WorkManager
 import com.github.azdrachak.aafundamentals.data.Movie
 import com.github.azdrachak.aafundamentals.data.getMoviesList
 import com.github.azdrachak.aafundamentals.data.room.MoviesDatabase
 import com.github.azdrachak.aafundamentals.databinding.FragmentMoviesListBinding
+import com.github.azdrachak.aafundamentals.work.WORK_NAME
+import com.github.azdrachak.aafundamentals.work.WorkRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,6 +52,13 @@ class MoviesListFragment : Fragment(), MoviesListAdapter.OnMovieClickListener {
 
     @ExperimentalSerializationApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        WorkManager.getInstance(requireContext().applicationContext)
+            .enqueueUniquePeriodicWork(
+                WORK_NAME,
+                ExistingPeriodicWorkPolicy.REPLACE,
+                WorkRepository().updateWorker
+            )
 
         CoroutineScope(Dispatchers.IO).launch {
             val movies = getMoviesList()

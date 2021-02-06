@@ -1,6 +1,10 @@
 package com.github.azdrachak.aafundamentals
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.github.azdrachak.aafundamentals.data.Movie
 import kotlinx.coroutines.launch
 

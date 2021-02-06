@@ -32,7 +32,6 @@ abstract class MoviesDatabase : RoomDatabase() {
                 INSTANCE = instance
                 instance
             }
-
         }
     }
 }
